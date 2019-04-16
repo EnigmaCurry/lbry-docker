@@ -25,7 +25,7 @@ COPY stuff/start.sh /usr/local/bin/start
 COPY stuff/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 COPY stuff/healthcheck.sh /usr/local/bin/healthcheck
 
-# USER lbrycrd
+USER lbrycrd
 # RUN mkdir /data
 VOLUME ["/data"]
 WORKDIR /data
