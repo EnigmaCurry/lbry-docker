@@ -31,11 +31,13 @@ RUN apt-get update && \
 FROM dependencies as compile
 
 RUN python3.7 -m pip install -U pyinstaller && \
-    git clone https://github.com/lbryio/lbry.git --depth 1 /lbry && \
-    cd /lbry && \
-    git clone https://github.com/lbryio/torba.git --depth 1 /lbry/torba && \
-    cd /lbry/torba && python3.7 -m pip install -e . && \
-    cd /lbry/ && python3.7 scripts/set_build.py && \
+    git clone https://github.com/lbryio/lbry.git --depth 1 /lbry
+WORKDIR /lbry
+RUN git clone https://github.com/lbryio/torba.git --depth 1 /lbry/torba
+WORKDIR /lbry/torba
+RUN python3.7 -m pip install -e .
+WORKDIR /lbry/
+RUN python3.7 scripts/set_build.py && \
     python3.7 -m pip install -e . && \
     pyinstaller -F -n lbrynet lbrynet/extras/cli.py && \
     chmod +x /lbry/dist/lbrynet && \
