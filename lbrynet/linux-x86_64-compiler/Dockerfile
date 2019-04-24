@@ -45,7 +45,7 @@ RUN python3.7 -m pip install -U pyinstaller && \
 
 FROM ubuntu:18.04 as app
 RUN adduser lbrynet --gecos GECOS --shell /bin/bash --disabled-password --home /home/lbrynet
-COPY start.sh /usr/local/bin/start
+COPY ../stuff/start.sh /usr/local/bin/start
 COPY --from=compile /lbry/dist/lbrynet /usr/local/bin/
 EXPOSE 5279
 USER lbrynet
