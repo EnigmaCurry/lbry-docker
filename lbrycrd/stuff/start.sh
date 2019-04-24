@@ -75,4 +75,8 @@ case $RUN_MODE in
     #nohup advance &>/dev/null &
     su -c "lbrycrdd -conf=/data/.lbrycrd/lbrycrd.conf" lbrycrd
     ;;
+  * )
+    echo "Error, you must define a RUN_MODE environment variable."
+    echo "Available options are testnet, regtest, chainquery, default, and reindex"
+    ;;
 esac
