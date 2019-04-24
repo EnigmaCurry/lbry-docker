@@ -48,7 +48,7 @@ RUN adduser lbrycrd --gecos GECOS --shell /bin/bash --disabled-password --home /
 ## This needn't be included until debugpaste is ready.
 # COPY debugpaste-it.sh /usr/local/bin/debugpaste-it
 # COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint
-COPY start.sh /usr/local/bin/start
+COPY ../stuff/start.sh /usr/local/bin/start
 
 
 USER lbrycrdd
