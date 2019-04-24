@@ -15,7 +15,7 @@ services:
       lbry-network:
         ipv4_address: 10.6.1.2
     environment:
-      RUN_MODE: chainquery
+      RUN_MODE: default
     env_file:
      - env
     expose:
