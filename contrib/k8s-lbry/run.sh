@@ -285,35 +285,16 @@ package() {
 
         PACKAGE="k8s-lbry-$1.tgz"
 
-        ## Build Helm package repository and upload to s3
-        if which s3cmd > /dev/null; then
-            if s3cmd info $PACKAGE_BUCKET > /dev/null; then
-                # Download all remote releases, to re-include in new index.yaml
-                exe s3cmd sync $PACKAGE_BUCKET .
-
-                # Check if release already exists
-                s3_url="$PACKAGE_BUCKET/$PACKAGE"
-                if s3cmd info "$s3_url"; then
-                    echo "$s3_url already exists. Aborting."
-                    exit 1
-                fi
-
-                # Package release and rebuild repository
-                exe helm dependency update
-                exe helm package .
-                exe helm repo index .
-
-                # Publish packages to s3
-                exe s3cmd put --acl-public index.yaml "$PACKAGE" $PACKAGE_BUCKET
-                exe s3cmd put --acl-public charts/*.tgz $PACKAGE_BUCKET/charts/
-            else
-                echo "s3cmd is not setup, run s3cmd --configure"
-                exit 1
-            fi
-        else
-            echo "s3cmd is not installed"
-            exit 1
-        fi
+        # Package release and rebuild repository
+        exe helm dependency update
+        exe helm package .
+        exe helm repo index --merge index.yaml .
+        ## Replace URLs in index to point to github releases:
+        sed -i 's|- k8s-lbry-\(.*\).tgz$|- https://github.com/lbryio/lbry-docker/releases/download/k8s-lbry-\1/k8s-lbry-\1.tgz|g' index.yaml
+        echo "Created package: $PACKAGE"
+        echo "Next steps: "
+        echo " 1) Create new github release (https://github.com/lbryio/lbry-docker/releases) and upload $PACKAGE"
+        echo " 2) Commit index.yaml and push to github"
     )
 }
 
